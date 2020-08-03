@@ -12,33 +12,36 @@ case class Question (id: Long, slateID: Long, text:String)
 
 class QuestionTableDef(tag: Tag) extends Table[Question](tag, "questions") {
   def id = column[Long]("id", O.PrimaryKey, O.AutoInc)
-  def text = column[String]("text")
   def slateID = column[Long]("slate_id")
+  def text = column[String]("text")
 
-  override def * = (id, slateID, text) <> (Question.tupled, Question.unapply)
-  //def slate = foreignKey("SLATE_QUESTION_FK", slateID, slates)(_.id)
+  override def * = (id, slateID, text).mapTo[Question]
+  def slate = foreignKey("SLATE_QUESTION_FK", slateID, Slates.slates)(_.id)
+}
+
+object Questions {
+  val questions = TableQuery[QuestionTableDef]
 }
 
 class Questions @Inject() (protected val dbConfigProvider: DatabaseConfigProvider)
                           (implicit executionContext: ExecutionContext)
                           extends HasDatabaseConfigProvider[JdbcProfile] {
-  val questions = TableQuery[QuestionTableDef]
 
   def listAll: Future[Seq[Question]] = {
-    dbConfig.db.run(questions.result)
+    dbConfig.db.run(Questions.questions.result)
   }
 
   def get(id: Long): Future[Option[Question]] = {
-    dbConfig.db.run(questions.filter(_.id == id).result.headOption)
+    dbConfig.db.run(Questions.questions.filter(_.id === id).result.headOption)
   }
 
   def add(question: Question): Future[String] = {
-    dbConfig.db.run(questions += question).map(res => "Slate successfully added").recover {
+    dbConfig.db.run(Questions.questions += question).map(res => "Slate successfully added").recover {
       case ex: Exception => ex.getCause.getMessage
     }
   }
 
   def delete(id: Long): Future[Int] = {
-    dbConfig.db.run(questions.filter(_.id === id).delete)
+    dbConfig.db.run(Questions.questions.filter(_.id === id).delete)
   }
 }

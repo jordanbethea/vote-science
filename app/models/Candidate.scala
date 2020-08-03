@@ -14,29 +14,33 @@ class CandidateTableDef(tag: Tag) extends Table[Candidate](tag, "candidates") {
   def description = column[String]("description")
   def questionID = column[Long]("question_id")
 
-  override def * = (id, name, description, questionID) <> (Candidate.tupled, Candidate.unapply)
+  override def * = (id, name, description, questionID).mapTo[Candidate]
+  def question = foreignKey("QUESTION_CANDIDATE_FK", questionID, Questions.questions)(_.id)
+}
+
+object Candidates {
+  val candidates = TableQuery[CandidateTableDef]
 }
 
 class Candidates @Inject() (protected val dbConfigProvider: DatabaseConfigProvider)
                        (implicit executionContext: ExecutionContext)
   extends HasDatabaseConfigProvider[JdbcProfile] {
-  val candidates = TableQuery[CandidateTableDef]
 
   def listAll: Future[Seq[Candidate]] = {
-    dbConfig.db.run(candidates.result)
+    dbConfig.db.run(Candidates.candidates.result)
   }
 
   def get(id: Long): Future[Option[Candidate]] = {
-    dbConfig.db.run(candidates.filter(_.id == id).result.headOption)
+    dbConfig.db.run(Candidates.candidates.filter(_.id === id).result.headOption)
   }
 
   def add(candidate: Candidate): Future[String] = {
-    dbConfig.db.run(candidates += candidate).map(res => "Slate successfully added").recover {
+    dbConfig.db.run(Candidates.candidates += candidate).map(res => "Slate successfully added").recover {
       case ex: Exception => ex.getCause.getMessage
     }
   }
 
   def delete(id: Long): Future[Int] = {
-    dbConfig.db.run(candidates.filter(_.id === id).delete)
+    dbConfig.db.run(Candidates.candidates.filter(_.id === id).delete)
   }
 }
