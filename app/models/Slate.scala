@@ -24,22 +24,27 @@ class Slates @Inject() (protected val dbConfigProvider: DatabaseConfigProvider)
                        (implicit executionContext: ExecutionContext)
                         extends HasDatabaseConfigProvider[JdbcProfile] {
 
+  def createSchema = {
+    db.run(Slates.slates.schema.create)
+  }
+
   def listAll: Future[Seq[Slate]] = {
-    dbConfig.db.run(Slates.slates.result)
+    db.run(Slates.slates.result)
   }
 
   def get(id: Long): Future[Option[Slate]] = {
-    dbConfig.db.run(Slates.slates.filter(_.id === id).result.headOption)
+    db.run(Slates.slates.filter(_.id === id).result.headOption)
   }
 
   def add(slate: Slate): Future[String] = {
-    dbConfig.db.run(Slates.slates += slate).map(res => "Slate successfully added").recover {
+    System.out.println("db: "+db.toString())
+    db.run(Slates.slates += slate).map(res => "Slate successfully added").recover {
       case ex: Exception => ex.getCause.getMessage
     }
   }
 
   def delete(id: Long): Future[Int] = {
-    dbConfig.db.run(Slates.slates.filter(_.id === id).delete)
+    db.run(Slates.slates.filter(_.id === id).delete)
   }
 }
 
