@@ -27,6 +27,14 @@ class Questions @Inject() (protected val dbConfigProvider: DatabaseConfigProvide
                           (implicit executionContext: ExecutionContext)
                           extends HasDatabaseConfigProvider[JdbcProfile] {
 
+  def createSchema = {
+    db.run(Questions.questions.schema.create)
+  }
+
+  def dropSchema = {
+    db.run(Questions.questions.schema.drop)
+  }
+
   def listAll: Future[Seq[Question]] = {
     dbConfig.db.run(Questions.questions.result)
   }
@@ -35,10 +43,11 @@ class Questions @Inject() (protected val dbConfigProvider: DatabaseConfigProvide
     dbConfig.db.run(Questions.questions.filter(_.id === id).result.headOption)
   }
 
-  def add(question: Question): Future[String] = {
-    dbConfig.db.run(Questions.questions += question).map(res => "Slate successfully added").recover {
+  def add(question: Question): Future[Int] = {
+    /*dbConfig.db.run(Questions.questions += question).map(res => "Question successfully added").recover {
       case ex: Exception => ex.getCause.getMessage
-    }
+    }*/
+    dbConfig.db.run(Questions.questions += question)
   }
 
   def delete(id: Long): Future[Int] = {

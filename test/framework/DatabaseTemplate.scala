@@ -19,10 +19,10 @@ trait DatabaseTemplate {
     "slick.dbs.default.db.url" -> "jdbc:h2:mem:play"
   )
 
-  val injector = new GuiceApplicationBuilder()
+  val builder = new GuiceApplicationBuilder()
     .configure(inMemoryDataBaseConf)
-    //.bindings(bind[Slates].to[Slates])
-    .injector()
+
+  val application = builder.build()
 
   def exec[T](future: Future[T]): T =
     Await.result(future , 2.seconds)

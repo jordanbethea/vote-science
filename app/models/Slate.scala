@@ -28,6 +28,10 @@ class Slates @Inject() (protected val dbConfigProvider: DatabaseConfigProvider)
     db.run(Slates.slates.schema.create)
   }
 
+  def dropSchema = {
+    db.run(Slates.slates.schema.drop)
+  }
+
   def listAll: Future[Seq[Slate]] = {
     db.run(Slates.slates.result)
   }
@@ -37,8 +41,13 @@ class Slates @Inject() (protected val dbConfigProvider: DatabaseConfigProvider)
   }
 
   def add(slate: Slate): Future[String] = {
-    System.out.println("db: "+db.toString())
     db.run(Slates.slates += slate).map(res => "Slate successfully added").recover {
+      case ex: Exception => ex.getCause.getMessage
+    }
+  }
+
+  def addAll(slates:Seq[Slate]): Future[String] = {
+    db.run(Slates.slates ++= slates).map(res => "All slates added successfully").recover {
       case ex: Exception => ex.getCause.getMessage
     }
   }
