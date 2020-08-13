@@ -43,5 +43,24 @@ class QuestionTest extends PlaySpec with DatabaseTemplate with BeforeAndAfterEac
       result must equal (1)
     }
 
+    "get existing question" in {
+      exec(slates.add(slate1))
+      exec(questions.add(question1))
+
+      val result = exec(questions.get(1)).getOrElse(null)
+      result.text must be ("Pick a Candidate:")
+    }
+
+    "delete existing question" in {
+      exec(slates.add(slate1))
+      exec(questions.add(question1))
+
+      val result = exec(questions.delete(1))
+      result must be (1)
+
+      val list = exec(questions.listAll)
+      list.length must be (0)
+    }
+
   }
 }

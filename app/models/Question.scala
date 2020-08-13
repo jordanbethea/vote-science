@@ -44,9 +44,6 @@ class Questions @Inject() (protected val dbConfigProvider: DatabaseConfigProvide
   }
 
   def add(question: Question): Future[Int] = {
-    /*dbConfig.db.run(Questions.questions += question).map(res => "Question successfully added").recover {
-      case ex: Exception => ex.getCause.getMessage
-    }*/
     dbConfig.db.run(Questions.questions += question)
   }
 

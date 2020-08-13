@@ -26,6 +26,14 @@ class Candidates @Inject() (protected val dbConfigProvider: DatabaseConfigProvid
                        (implicit executionContext: ExecutionContext)
   extends HasDatabaseConfigProvider[JdbcProfile] {
 
+  def createSchema = {
+    dbConfig.db.run(Candidates.candidates.schema.create)
+  }
+
+  def dropSchema = {
+    dbConfig.db.run(Candidates.candidates.schema.drop)
+  }
+
   def listAll: Future[Seq[Candidate]] = {
     dbConfig.db.run(Candidates.candidates.result)
   }
@@ -34,10 +42,8 @@ class Candidates @Inject() (protected val dbConfigProvider: DatabaseConfigProvid
     dbConfig.db.run(Candidates.candidates.filter(_.id === id).result.headOption)
   }
 
-  def add(candidate: Candidate): Future[String] = {
-    dbConfig.db.run(Candidates.candidates += candidate).map(res => "Slate successfully added").recover {
-      case ex: Exception => ex.getCause.getMessage
-    }
+  def add(candidate: Candidate): Future[Int] = {
+    dbConfig.db.run(Candidates.candidates += candidate)
   }
 
   def delete(id: Long): Future[Int] = {
