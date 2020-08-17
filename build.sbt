@@ -10,6 +10,7 @@ scalaVersion := "2.13.3"
 libraryDependencies += guice
 libraryDependencies += "org.scalatestplus.play" %% "scalatestplus-play" % "5.0.0" % Test
 libraryDependencies += "com.typesafe.play" %% "play-slick" % "4.0.2"
+libraryDependencies += "com.typesafe.play" %% "play-slick-evolutions" % "4.0.2"
 libraryDependencies += "com.h2database" % "h2" % "1.4.200"
 libraryDependencies += jdbc % Test
 

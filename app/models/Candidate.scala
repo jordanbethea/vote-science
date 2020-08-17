@@ -8,11 +8,11 @@ import scala.concurrent.{ExecutionContext, Future}
 
 case class Candidate (id: Long, name: String, description: String, questionID:Long)
 
-class CandidateTableDef(tag: Tag) extends Table[Candidate](tag, "candidates") {
-  def id = column[Long]("id", O.PrimaryKey, O.AutoInc)
-  def name = column[String]("name")
-  def description = column[String]("description")
-  def questionID = column[Long]("question_id")
+class CandidateTableDef(tag: Tag) extends Table[Candidate](tag, "CANDIDATES") {
+  def id = column[Long]("ID", O.PrimaryKey, O.AutoInc)
+  def name = column[String]("NAME")
+  def description = column[String]("DESCRIPTION")
+  def questionID = column[Long]("QUESTION_ID")
 
   override def * = (id, name, description, questionID).mapTo[Candidate]
   def question = foreignKey("QUESTION_CANDIDATE_FK", questionID, Questions.questions)(_.id)

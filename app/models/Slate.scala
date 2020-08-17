@@ -8,10 +8,10 @@ import scala.concurrent.{ExecutionContext, Future}
 
 case class Slate(id: Long, title: String, creator: String)
 
-class SlateTableDef(tag: Tag) extends Table[Slate](tag, "slates") {
-  def id = column[Long]("id", O.PrimaryKey, O.AutoInc)
-  def title = column[String]("title")
-  def creator = column[String]("creator")
+class SlateTableDef(tag: Tag) extends Table[Slate](tag, "SLATES") {
+  def id = column[Long]("ID", O.PrimaryKey, O.AutoInc)
+  def title = column[String]("TITLE")
+  def creator = column[String]("CREATOR")
 
   override def * = (id, title, creator).mapTo[Slate]
 }
@@ -40,16 +40,12 @@ class Slates @Inject() (protected val dbConfigProvider: DatabaseConfigProvider)
     db.run(Slates.slates.filter(_.id === id).result.headOption)
   }
 
-  def add(slate: Slate): Future[String] = {
-    db.run(Slates.slates += slate).map(res => "Slate successfully added").recover {
-      case ex: Exception => ex.getCause.getMessage
-    }
+  def add(slate: Slate): Future[Int] = {
+    db.run(Slates.slates += slate)
   }
 
-  def addAll(slates:Seq[Slate]): Future[String] = {
-    db.run(Slates.slates ++= slates).map(res => "All slates added successfully").recover {
-      case ex: Exception => ex.getCause.getMessage
-    }
+  def addAll(slates:Seq[Slate]): Future[Option[Int]] = {
+    db.run(Slates.slates ++= slates)
   }
 
   def delete(id: Long): Future[Int] = {

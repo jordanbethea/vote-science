@@ -1,0 +1,15 @@
+@(slates: Seq[Slate])
+
+<html lang="en">
+    <head>
+        <title>List of slates</title>
+    </head>
+    <body>
+        <a href="/addSlate">Add a slate</a>
+        <table><tr><td>
+        @for(slate <- slates){
+            id: @slate.id, title: @slate.title, creator: @slate.creator
+        }
+        </td></tr></table>
+    </body>
+</html>
