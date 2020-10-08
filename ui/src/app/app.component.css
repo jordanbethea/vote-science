@@ -1,3 +1,27 @@
 .post-request-test {
   padding-top: 1rem;
 }
+
+nav {
+  display: flex;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  overflow: auto;
+  height: auto;
+
+  background-color: blue;
+  
+}
+
+nav a { 
+  color:white;
+  display: inline-block;
+  padding: 10px;
+  font-size: 20px;
+
+}
+
+.content {
+  margin-top: 50px;
+}

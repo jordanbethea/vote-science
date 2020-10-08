@@ -8,26 +8,29 @@ import { RouteExampleComponent } from './route-example/route-example.component';
 
 import { AppService } from './app.service';
 import { AppHttpInterceptorService } from './http-interceptor.service';
+import { HomepageComponent } from './homepage/homepage.component';
+import { ViewSlatesComponent } from './view-slates/view-slates.component';
+import { CreateSlateComponent } from './create-slate/create-slate.component';
 
 const routes: Routes = [
   {
-    path: 'scala',
-    component: RouteExampleComponent,
-    data: { technology: 'Scala' }
+    path: 'home',
+    component: HomepageComponent,
+    data: {}
   },
   {
-    path: 'play',
-    component: RouteExampleComponent,
-    data: { technology: 'Play' }
+    path: 'createSlate',
+    component: CreateSlateComponent,
+    data: {}
   },
   {
-    path: 'angular',
-    component: RouteExampleComponent,
-    data: { technology: 'Angular' }
+    path: 'viewSlates',
+    component: ViewSlatesComponent,
+    data: {}
   },
   {
     path: '**',
-    redirectTo: '/play',
+    redirectTo: '/home',
     pathMatch: 'full'
   }
 ];
@@ -35,7 +38,10 @@ const routes: Routes = [
 @NgModule({
   declarations: [
     AppComponent,
-    RouteExampleComponent
+    RouteExampleComponent,
+    HomepageComponent,
+    ViewSlatesComponent,
+    CreateSlateComponent
   ],
   imports: [
     BrowserModule,

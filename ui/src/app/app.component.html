@@ -1,9 +1,16 @@
+<nav>
+  <a [routerLink]="['home']">Home</a>
+  <a [routerLink]="['viewSlates']">View Slate List</a>
+  <a [routerLink]="['createSlate']">Create Slate</a>
+</nav>
+
 <!--The content below is only a placeholder and can be replaced.-->
-<div style="text-align:center">
+<div class="content" style="text-align:center">
   <h1>
     Welcome to {{title}}!
   </h1>
-  <nav>
+  
+  <!-- <nav>
     <a [routerLink]="['scala']">
       <img width="450" height="300" src="../assets/scala.png">
     </a>
@@ -13,7 +20,7 @@
     <a [routerLink]="['angular']">
       <img width="300" src="../assets/angular.svg">
     </a>
-  </nav>
+  </nav> -->
   <router-outlet></router-outlet>
   <div>
     <h2>Check out the project on GitHub for more information</h2>
