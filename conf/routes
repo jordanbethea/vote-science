@@ -14,3 +14,6 @@ GET     /*file                      controllers.FrontendController.assetOrDefaul
 
 # Test post request
 POST    /api/postTest               controllers.HomeController.postTest()
+
+# create Slate
+POST    /api/createSlate            controllers.CreationController.createSlate()

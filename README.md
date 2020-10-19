@@ -14,8 +14,8 @@ Used the
 * [Angular CLI: 8.3.9](https://cli.angular.io/)
 
 
-###Useful Info (for myself):
-####Accessing the h2 browser, instructions from stack overflow: 
+### Useful Info (for myself):
+#### Accessing the h2 browser, instructions from stack overflow: 
 To browse the contents of your database via the H2 Web Console, start both the web console and the Play application via the same Play console:
 
 * At first, enter the Play console by running the Typesafe Activator: ~/Projects/play-app $ activator 

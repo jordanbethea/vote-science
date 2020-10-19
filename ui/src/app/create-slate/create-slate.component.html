@@ -1,1 +1,41 @@
 <p>create-slate works!</p>
+
+<form [formControl]="form">
+    Create New Slate:
+    <label>
+        Title:
+        <input type="text" formControlName="title">
+    </label>
+    <label>
+        Creator:
+        <input type="text" formControlName="creator">
+    </label>
+    <div formArrayName="questions">
+        <h4>Questions</h4>
+        <button (click)="addQuestion()">Add Question</button>
+        <div *ngFor="let question of questions.controls; let i=index">
+            <div [formGroupName]="i">
+                <label>
+                    Question Text:
+                    <input type="text" formControlName="text">
+                </label>
+                <div formArrayName="candidates">
+                    <h6>Possible Candidates:</h6>
+                    <button (click)="addCandidate(i)">Add Candidate</button>
+                    <div *ngFor="let candidate of candidates.controls; let j=index">
+                        <div [formGroupName]="j">
+                            <label>
+                                Name:
+                                <input type="text" formControlName="name">
+                            </label>
+                            <label>
+                                Description:
+                                <input type="text" formControlName="description">
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
