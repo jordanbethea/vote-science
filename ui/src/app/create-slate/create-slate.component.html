@@ -1,6 +1,7 @@
 <p>create-slate works!</p>
-
-<form [formControl]="form">
+questions length: {{this.slateForm.get('questions').length}}<br>
+{{localJson.stringify(createSlateFromForm())}}
+<form [formGroup]="slateForm">
     Create New Slate:
     <label>
         Title:
@@ -22,7 +23,7 @@
                 <div formArrayName="candidates">
                     <h6>Possible Candidates:</h6>
                     <button (click)="addCandidate(i)">Add Candidate</button>
-                    <div *ngFor="let candidate of candidates.controls; let j=index">
+                    <div *ngFor="let candidate of candidates(i).controls; let j=index"> <!--questions.controls[i].get('candidates').controls-->
                         <div [formGroupName]="j">
                             <label>
                                 Name:

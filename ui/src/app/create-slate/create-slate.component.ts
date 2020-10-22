@@ -10,9 +10,11 @@ import { CreationService, Slate } from '../creation.service';
 })
 export class CreateSlateComponent implements OnInit {
 
+  localJson = JSON;
+
   constructor(private fb: FormBuilder, private createService: CreationService) { }
 
-  form = this.fb.group({
+  slateForm = this.fb.group({
     title: [''],
     creator: [''],
     questions: this.fb.array([
@@ -28,15 +30,26 @@ export class CreateSlateComponent implements OnInit {
     ])
   });
 
+
+
   ngOnInit() {
   }
 
-  getQuestions(): FormArray {
-    return this.form.get('questions') as FormArray;
+  get questions(): FormArray {
+    return this.slateForm.get('questions') as FormArray
+  }
+
+ /**
+   * Returns list of candidates for a given question
+   * @param question number representing the position of the question in the form array
+   */
+  candidates(question: number): FormArray {
+    return this.questions.controls[question].get('candidates') as FormArray
   }
 
   addQuestion() {
-    this.getQuestions().push(
+    console.log(`num questions: ${(this.slateForm.get('questions') as FormArray)?.length}`);
+    this.questions.push(
       this.fb.group({
         text: [''],
         candidates: this.fb.array([
@@ -47,19 +60,11 @@ export class CreateSlateComponent implements OnInit {
         ])
       })
     );
-  }
-
-  /**
-   * Returns list of candidates for a given question
-   * @param question number representing the position of the question in the form array
-   */
-  getCandidates(questionPos: number): FormArray {
-    const question = this.getQuestions().at(questionPos);
-    return question.get('candidates') as FormArray;
+    console.log(`num questions: ${(this.slateForm.get('questions') as FormArray)?.length}`);
   }
 
   addCandidate(questionPos: number) {
-    this.getCandidates(questionPos).push(
+    this.candidates(questionPos).push(
       this.fb.group({
         name: [''],
         description: ['']
@@ -80,9 +85,9 @@ export class CreateSlateComponent implements OnInit {
   createSlateFromForm(): Slate {
     return {
         id: null,  //to start with, IDs are null until saved. Later update this to account for editing existing slates
-        title: this.form.get('title')?.value ?? "",  //if title exists get value - if this is null, use blank string instead. optional chaining/nullish coalescing
-        creator: this.form.get('creator')?.value ?? "",
-        questions: (this.form.get('questions') as FormArray).controls.map(questionForm => {
+        title: this.slateForm.get('title')?.value ?? "",  //if title exists get value - if this is null, use blank string instead. optional chaining/nullish coalescing
+        creator: this.slateForm.get('creator')?.value ?? "",
+        questions: (this.slateForm.get('questions') as FormArray).controls.map(questionForm => {
           return {
             id: null,
             text: questionForm.get('text')?.value ?? "",
