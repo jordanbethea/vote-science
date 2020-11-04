@@ -1,42 +1,44 @@
-<p>create-slate works!</p>
-questions length: {{this.slateForm.get('questions').length}}<br>
-{{localJson.stringify(createSlateFromForm())}}
 <form [formGroup]="slateForm">
-    Create New Slate:
-    <label>
-        Title:
-        <input type="text" formControlName="title">
-    </label>
-    <label>
-        Creator:
-        <input type="text" formControlName="creator">
-    </label>
-    <div formArrayName="questions">
+    <div class="slateInfo">
+        <h2>Create New Slate:</h2>
+        <label>
+            Title:
+            <input type="text" formControlName="title">
+        </label><br>
+        <label>
+            Creator:
+            <input type="text" formControlName="creator">
+        </label><br>
+        <button class="saveButton" (click)="save()">Save New Slate</button>
+    </div>
+    <div class="questionList" formArrayName="questions">
         <h4>Questions</h4>
-        <button (click)="addQuestion()">Add Question</button>
         <div *ngFor="let question of questions.controls; let i=index">
-            <div [formGroupName]="i">
-                <label>
-                    Question Text:
-                    <input type="text" formControlName="text">
-                </label>
-                <div formArrayName="candidates">
-                    <h6>Possible Candidates:</h6>
-                    <button (click)="addCandidate(i)">Add Candidate</button>
-                    <div *ngFor="let candidate of candidates(i).controls; let j=index"> <!--questions.controls[i].get('candidates').controls-->
+            <div class="questionItem" [formGroupName]="i">
+                <div class="questionInfo">
+                    <label>
+                        Question Text:
+                        <input type="text" formControlName="text">
+                    </label><br>
+                </div>
+                <div class="candidateList" formArrayName="candidates">
+                    <p>Possible Candidates:</p>
+                    <div *ngFor="let candidate of candidates(i).controls; let j=index">
                         <div [formGroupName]="j">
                             <label>
                                 Name:
                                 <input type="text" formControlName="name">
-                            </label>
+                            </label><br>
                             <label>
                                 Description:
                                 <input type="text" formControlName="description">
-                            </label>
+                            </label><br>
                         </div>
                     </div>
+                    <button (click)="addCandidate(i)">Add Candidate</button>
                 </div>
             </div>
         </div>
+        <button (click)="addQuestion()">Add Question</button>
     </div>
 </form>

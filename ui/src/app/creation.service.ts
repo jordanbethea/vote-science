@@ -7,7 +7,7 @@ import { Observable } from 'rxjs/index';
   providedIn: 'root'
 })
 export class CreationService {
-  private creationUrl = '/api/create';
+  private creationUrl = '/api/createSlate';
 
   constructor(private http: HttpClient) { }
 

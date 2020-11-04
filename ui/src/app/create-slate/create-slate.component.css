@@ -1,0 +1,25 @@
+form {
+    text-align:left;
+    display: flex;
+}
+
+.slateInfo {
+    vertical-align:top;
+    flex: 1;
+}
+
+.questionInfo {
+    flex: 1;
+}
+
+.questionList {
+    flex: 3;
+}
+.questionItem {
+    display: flex;
+}
+
+.candidateList {
+    flex: 1;
+}
+
