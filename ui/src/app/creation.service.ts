@@ -8,11 +8,16 @@ import { Observable } from 'rxjs/index';
 })
 export class CreationService {
   private creationUrl = '/api/createSlate';
+  private listUrl = '/api/slates';
 
   constructor(private http: HttpClient) { }
 
   createNewSlate(newSlate: Slate) : Observable<any> {
     return this.http.post(this.creationUrl, newSlate);
+  }
+
+  getAllSlates() : Observable<Array<Slate>> {
+    return this.http.get<Array<Slate>>(this.listUrl);
   }
 
 }

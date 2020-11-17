@@ -1,1 +1,19 @@
-<p>view-slates works!</p>
+<div class="slate" *ngFor="let slate of this.slates">
+    <div class="slateInfo">
+        Title: {{slate.title}}
+        Creator: {{slate.creator}}
+    </div>
+    <div class="questionsContainer">
+        <div class="question" *ngFor="let question of slate.questions">
+            <div class="questionInfo">
+                {{question.text}}
+            </div>
+            <div class="candidatesContainer">
+                <div class="candidate" *ngFor="let candidate of question.candidates">
+                    {{candidate.name}}
+                    {{candidate.description}}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,22 @@
+.slate {
+    display:flex;
+}
+
+.slateInfo {
+    flex: 1;
+}
+.questionsContainer {
+    flex: 2;
+}
+.question {
+    display: flex;
+}
+
+.questionInfo {
+    flex: 1;
+}
+
+.candidatesContainer {
+    flex: 1;
+}
+
