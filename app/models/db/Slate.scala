@@ -110,4 +110,8 @@ class SlateRepository @Inject()(protected val dbConfigProvider: DatabaseConfigPr
   def delete(id: Long): Future[Int] = {
     db.run(SlateRepository.slates.filter(_.id === id).delete)
   }
+
+  def deleteAll() : Future[Int] = {
+    db.run(SlateRepository.slates.delete)
+  }
 }

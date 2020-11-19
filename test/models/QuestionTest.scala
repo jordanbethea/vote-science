@@ -1,4 +1,4 @@
-package models
+package models.db
 
 import framework.DatabaseTemplate
 import org.h2.jdbc.JdbcSQLIntegrityConstraintViolationException
@@ -13,18 +13,18 @@ class QuestionTest extends PlaySpec with DatabaseTemplate with BeforeAndAfterEac
   val question2 = new Question(-21, 2, "Pick another one:")
 
   val injector = application.injector
-  val slates = injector.instanceOf[Slates]
-  val questions = injector.instanceOf[Questions]
+  val slates = injector.instanceOf[SlateRepository]
+  val questions = injector.instanceOf[QuestionRepository]
 
-  override def beforeEach() = {
-    exec(slates.createSchema)
-    exec(questions.createSchema)
-  }
-
-  override def afterEach() = {
-    exec(questions.dropSchema)
-    exec(slates.dropSchema)
-  }
+//  override def beforeEach() = {
+//    exec(slates.createSchema)
+//    exec(questions.createSchema)
+//  }
+//
+//  override def afterEach() = {
+//    exec(questions.dropSchema)
+//    exec(slates.dropSchema)
+//  }
 
 //  "Questions" must {
 //    "create without error" in {

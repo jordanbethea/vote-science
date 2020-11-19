@@ -1,4 +1,4 @@
-package models
+package models.db
 
 import framework.DatabaseTemplate
 import org.h2.jdbc.JdbcSQLIntegrityConstraintViolationException
@@ -6,21 +6,21 @@ import org.scalatest.BeforeAndAfterEach
 import org.scalatestplus.play._
 
 class CandidateTest extends PlaySpec with DatabaseTemplate with BeforeAndAfterEach {
-  val slates = application.injector.instanceOf[Slates]
-  val questions = application.injector.instanceOf[Questions]
-  val candidates = application.injector.instanceOf[Candidates]
+  val slates = application.injector.instanceOf[SlateRepository]
+  val questions = application.injector.instanceOf[QuestionRepository]
+  val candidates = application.injector.instanceOf[CandidateRepository]
 
-  override def beforeEach() = {
-    exec(slates.createSchema)
-    exec(questions.createSchema)
-    exec(candidates.createSchema)
-  }
-
-  override def afterEach() = {
-    exec(candidates.dropSchema)
-    exec(questions.dropSchema)
-    exec(slates.dropSchema)
-  }
+//  override def beforeEach() = {
+//    exec(slates.createSchema)
+//    exec(questions.createSchema)
+//    exec(candidates.createSchema)
+//  }
+//
+//  override def afterEach() = {
+//    exec(candidates.dropSchema)
+//    exec(questions.dropSchema)
+//    exec(slates.dropSchema)
+//  }
 
   val slate1 = new Slate(-1, "Slate 1", "Slate Maker")
   val question1 = new Question(-1, 1, "Pick a Candidate:")
