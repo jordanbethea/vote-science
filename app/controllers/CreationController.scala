@@ -2,15 +2,13 @@ package controllers
 
 import javax.inject.Singleton
 import javax.inject.Inject
-import play.api.mvc.{AbstractController, Action, ControllerComponents}
+import play.api.mvc.{AbstractController, ControllerComponents}
 import play.api.libs.json.{JsResult, Json}
 import models.dto.SlateDTO
 import models.db._
 import play.api.libs.json._
 
-import scala.concurrent.{ExecutionContext, Future}
-import scala.util.{Failure, Success}
-
+import scala.concurrent.{ExecutionContext}
 
 @Singleton
 class CreationController @Inject()(slatesRepo: SlateRepository,
@@ -54,18 +52,5 @@ class CreationController @Inject()(slatesRepo: SlateRepository,
       Console.println(Json.toJson(SlateRepository.constructSlateDTO(slates, questions, candidates)))
       Ok(Json.toJson(SlateRepository.constructSlateDTO(slates, questions, candidates)))
     }
-  }
-
-  def getSlatesTest = Action.async {
-//    val testSlate = new SlateDTO(Option(1l), "test slate", "creator", Nil)
-//    val testSlates = Array(testSlate)
-    slatesRepo.listAll.map { testSlatesDB =>
-      val testSlates = SlateRepository.constructSlateDTO(testSlatesDB, Nil, Nil)
-      val testSlatesJson = Json.toJson(testSlates)
-      val testSlatesString = Json.stringify(testSlatesJson)
-      Console.println(s"Returning: $testSlatesString")
-
-      Ok(testSlatesJson)
-}
   }
 }

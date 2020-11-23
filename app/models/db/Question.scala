@@ -55,8 +55,8 @@ class QuestionRepository @Inject()(protected val dbConfigProvider: DatabaseConfi
     dbConfig.db.run(QuestionRepository.questions.filter(_.id === id).result.headOption)
   }
 
-  def getForSlate(id: Long): Future[Option[Question]] = {
-    dbConfig.db.run(QuestionRepository.questions.filter(_.slateID === id).result.headOption)
+  def getForSlate(id: Long): Future[Seq[Question]] = {
+    dbConfig.db.run(QuestionRepository.questions.filter(_.slateID === id).result)
   }
 
   def add(question: Question): Future[Long] = {

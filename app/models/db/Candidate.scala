@@ -30,6 +30,7 @@ class CandidateTableDef(tag: Tag) extends Table[Candidate](tag, "CANDIDATES") {
 
 object CandidateRepository {
   val candidates = TableQuery[CandidateTableDef]
+  val candidatesInsert = candidates returning candidates.map(_.id)
 }
 
 class CandidateRepository @Inject()(protected val dbConfigProvider: DatabaseConfigProvider)
@@ -52,19 +53,19 @@ class CandidateRepository @Inject()(protected val dbConfigProvider: DatabaseConf
     dbConfig.db.run(CandidateRepository.candidates.filter(_.id === id).result.headOption)
   }
 
-  def getForQuestions(ids: Seq[Long]): Future[Option[Candidate]] = {
+  def getForQuestions(ids: Seq[Long]): Future[Seq[Candidate]] = {
     //For future reference - first version doesn't work because contains uses == and slick
     //requires ===, =!=
     //dbConfig.db.run(CandidateRepository.candidates.filter(c => ids.contains(c.questionID)).result.headOption)
-    dbConfig.db.run(CandidateRepository.candidates.filter(_.questionID.inSet(ids)).result.headOption)
+    dbConfig.db.run(CandidateRepository.candidates.filter(_.questionID.inSet(ids)).result)
   }
 
-  def add(candidate: Candidate): Future[Int] = {
-    dbConfig.db.run(CandidateRepository.candidates += candidate)
+  def add(candidate: Candidate): Future[Long] = {
+    dbConfig.db.run(CandidateRepository.candidatesInsert += candidate)
   }
 
-  def addAll(candidates: Seq[Candidate]) = {
-    dbConfig.db.run(CandidateRepository.candidates ++= candidates)
+  def addAll(candidates: Seq[Candidate]): Future[Seq[Long]] = {
+    dbConfig.db.run(CandidateRepository.candidatesInsert ++= candidates)
   }
 
   def delete(id: Long): Future[Int] = {

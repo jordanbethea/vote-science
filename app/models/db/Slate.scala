@@ -56,6 +56,16 @@ class SlateRepository @Inject()(protected val dbConfigProvider: DatabaseConfigPr
     db.run(SlateRepository.slates.schema.drop)
   }
 
+  def createAllLinkedSlateSchemas = {
+    val allSchemas = SlateRepository.slates.schema ++ QuestionRepository.questions.schema ++ CandidateRepository.candidates.schema
+    db.run(allSchemas.create)
+  }
+
+  def dropAllLinkedSlateSchemas = {
+    val allSchemas = SlateRepository.slates.schema ++ QuestionRepository.questions.schema ++ CandidateRepository.candidates.schema
+    db.run(allSchemas.drop)
+  }
+
   def listAll: Future[Seq[Slate]] = {
     db.run(SlateRepository.slates.result)
   }
@@ -64,15 +74,7 @@ class SlateRepository @Inject()(protected val dbConfigProvider: DatabaseConfigPr
     db.run(SlateRepository.slates.filter(_.id === id).result.headOption)
   }
 
-  def fullAdd(slate: SlateDTO): Future[Seq[Unit]] = {
-//    val tx = for {
-//      newSlateId <- SlateRepository.slatesInserts += Slate(slate.id.getOrElse(0), slate.title, slate.creator)
-//      question <- slate.questions
-//      newQuestionId <- QuestionRepository.questionsInserts += Question(question.id.getOrElse(0), newSlateId, question.text)
-//      candidate <- question.candidates
-//      candidateId <- CandidateRepository.candidates += Candidate(candidate.id.getOrElse(0), candidate.name, candidate.description, newQuestionId)
-//    } yield (newSlateId)
-
+  def fullAdd(slate: SlateDTO): Future[Long] = {
     def addCandidates(qID: Long, candidates: Seq[CandidateDTO]) : DBIO[Option[Int]] = {
       val dbCandidates = candidates.map(cDTO => Candidate(cDTO.id.getOrElse(0), cDTO.name, cDTO.description, qID))
       CandidateRepository.candidates ++= dbCandidates
@@ -92,7 +94,7 @@ class SlateRepository @Inject()(protected val dbConfigProvider: DatabaseConfigPr
 
     val tx = addSlateOnly(slate).flatMap {
       slateID =>
-        DBIO.sequence(slate.questions.map(addQuestion(slateID, _)))
+        DBIO.sequence(slate.questions.map(addQuestion(slateID, _))).map(_ => slateID)
     }
 
     tx.transactionally
@@ -103,7 +105,7 @@ class SlateRepository @Inject()(protected val dbConfigProvider: DatabaseConfigPr
     db.run(SlateRepository.slatesInserts += slate)
   }
 
-  def addAll(slates:Seq[Slate]) = {
+  def addAll(slates:Seq[Slate]): Future[Seq[Long]] = {
     db.run(SlateRepository.slatesInserts ++= slates)
   }
 

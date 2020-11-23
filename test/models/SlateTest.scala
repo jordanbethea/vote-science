@@ -1,31 +1,31 @@
 package models.db
 
 import framework.DatabaseTemplate
-import org.scalatest.BeforeAndAfterEach
+import models.dto.{CandidateDTO, QuestionDTO, SlateDTO}
 import org.scalatestplus.play._
 
-class SlateTest extends PlaySpec with DatabaseTemplate with BeforeAndAfterEach {
+class SlateTest extends PlaySpec with DatabaseTemplate {
 
   val insert1:Slate = new Slate(-20, "Slate 1", "Slate Maker")
   val insert2:Slate = new Slate(-21, "Slate 2", "Slate Maker")
   val insert3:Slate = new Slate(-22, "Slate 3", "Other Slate Maker")
   val insert4:Slate = new Slate(-23, "Slate 4", "Other Slate Maker")
 
-  val insertResult:Slate = new Slate(1, "Slate 1", "Slate Maker")
+  val insertResult = (slateID:Long) => new Slate(slateID, "Slate 1", "Slate Maker")
+
+  val slateDTOInsert:SlateDTO = new SlateDTO(None, "Slate 1", "Slate Maker", Seq(
+    new QuestionDTO(None, "How you doing?", Seq(
+      new CandidateDTO(None, "Good", "Actually it should be well"),
+      new CandidateDTO(None, "Bad", "Poorly, actually"))),
+    new QuestionDTO(None, "It's Pie time: ", Seq(
+      new CandidateDTO(None, "Blueberry", "Good choice"),
+      new CandidateDTO(None, "Sweet Potato", "Best choice")))
+  ))
 
   val injector = application.injector
   val slates = injector.instanceOf[SlateRepository]
-  exec(slates.dropSchema)
-
-  override def beforeEach()= {
-    //slates = injector.instanceOf[SlateRepository]
-    exec(slates.createSchema)
-  }
-
-  override def afterEach()= {
-    exec(slates.dropSchema)
-    //slates.deleteAll
-  }
+  val questions = injector.instanceOf[QuestionRepository]
+  val candidates = injector.instanceOf[CandidateRepository]
 
   "Slate table schema" must {
     "create without error" in {
@@ -33,42 +33,54 @@ class SlateTest extends PlaySpec with DatabaseTemplate with BeforeAndAfterEach {
     }
 
     "insert a new slate" in {
-      exec(slates.add(insert1))
+      val slateID = exec(slates.add(insert1))
 
       val result:Seq[Slate] = exec(slates.listAll)
-      result must contain (insertResult)
+      result must contain (insertResult(slateID))
     }
 
     "insert multiple slates" in {
       val inserts = Seq(insert1, insert2, insert3, insert4)
 
-      exec(slates.addAll(inserts))
+      val insertIDs = exec(slates.addAll(inserts))
 
-      val result:Seq[Slate] = exec(slates.listAll)
-      result.length must be (4)
+      insertIDs must not contain(None)
+
+      val getResults = exec(slates.get(insertIDs.head))
+      getResults must not be (None)
     }
 
     "get an existing slate by id" in {
       val inserts = Seq(insert1, insert2, insert3, insert4)
 
-      exec(slates.addAll(inserts))
+      val results = exec(slates.addAll(inserts))
 
-      val result:Slate = exec(slates.get(1)).getOrElse(null)
-      result must be (insertResult)
+      val result:Slate = exec(slates.get(results(0))).getOrElse(null)
+      result must be (insertResult(results(0)))
     }
 
     "delete an existing slate" in {
       val inserts = Seq(insert1, insert2, insert3, insert4)
 
-      exec(slates.addAll(inserts))
+      val results: Seq[Long] = exec(slates.addAll(inserts))
 
-      slates.delete(1)
+      slates.delete(results(0))
 
-      val resultAll = exec(slates.listAll)
-      resultAll.length must be (3)
-
-      val resultSingle = exec(slates.get(1))
+      val resultSingle = exec(slates.get(results(0)))
       resultSingle mustBe empty
+    }
+
+    "insert an entire nested slate with data" in {
+      val insertResult = exec(slates.fullAdd(slateDTOInsert))
+
+      val getSlate = exec(slates.get(insertResult))
+      getSlate must not be (None)
+
+      val getQs = exec(questions.getForSlate(insertResult))
+      getQs.length must be (2)
+
+      val getCs = exec(candidates.getForQuestions(getQs.map(_.id)))
+      getCs.length must be (4)
     }
   }
 }
