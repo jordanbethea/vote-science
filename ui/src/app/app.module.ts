@@ -5,9 +5,7 @@ import { HTTP_INTERCEPTORS, HttpClientModule, HttpClientXsrfModule } from '@angu
 import { ReactiveFormsModule } from '@angular/forms';
 
 import { AppComponent } from './app.component';
-import { RouteExampleComponent } from './route-example/route-example.component';
 
-import { AppService } from './app.service';
 import { AppHttpInterceptorService } from './http-interceptor.service';
 import { HomepageComponent } from './homepage/homepage.component';
 import { ViewSlatesComponent } from './view-slates/view-slates.component';
@@ -39,7 +37,6 @@ const routes: Routes = [
 @NgModule({
   declarations: [
     AppComponent,
-    RouteExampleComponent,
     HomepageComponent,
     ViewSlatesComponent,
     CreateSlateComponent
@@ -55,7 +52,6 @@ const routes: Routes = [
     ReactiveFormsModule
   ],
   providers: [
-    AppService,
     {
       multi: true,
       provide: HTTP_INTERCEPTORS,
