@@ -8,7 +8,7 @@ import slick.jdbc.H2Profile.api._
 
 import scala.concurrent.{ExecutionContext, Future}
 
-case class Candidate (id: Long, name: String, description: String, questionID:Long)
+case class Candidate (id: Long, name: String, description: String, slateID: Long, questionID:Long)
 
 object Candidate {
   implicit def candidateDTOToCandidate(questionID: Long, candidateDTO: CandidateDTO): Candidate = {
@@ -22,10 +22,12 @@ class CandidateTableDef(tag: Tag) extends Table[Candidate](tag, "CANDIDATES") {
   def id = column[Long]("ID", O.PrimaryKey, O.AutoInc)
   def name = column[String]("NAME")
   def description = column[String]("DESCRIPTION")
+  def slateID = column[Long]("SLATE_ID")
   def questionID = column[Long]("QUESTION_ID")
 
   override def * = (id, name, description, questionID).mapTo[Candidate]
   def question = foreignKey("QUESTION_CANDIDATE_FK", questionID, QuestionRepository.questions)(_.id)
+  def ballot = foreignKey("SLATE_CANDIDATE_FK", slateID, BallotRepository.ballots)(_.id)
 }
 
 object CandidateRepository {

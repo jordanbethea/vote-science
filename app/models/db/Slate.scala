@@ -74,9 +74,22 @@ class SlateRepository @Inject()(protected val dbConfigProvider: DatabaseConfigPr
     db.run(SlateRepository.slates.filter(_.id === id).result.headOption)
   }
 
+  def getFullSlate(id: Long) : Future[Option[SlateDTO]] = {
+    val slatesF: Future[Seq[Slate]] = db.run(SlateRepository.slates.filter(_.id == id).result)
+    val questionsF: Future[Seq[Question]] = db.run(QuestionRepository.questions.filter(_.slateID == id).result)
+    val candidatesF: Future[Seq[Candidate]] = db.run(CandidateRepository.candidates.filter(_.slateID == id).result)
+    for {
+      slate <- slatesF
+      question <- questionsF
+      candidates <- candidatesF
+    } yield {
+      Option(SlateRepository.constructSlateDTO(slate, question, candidates).head)
+    }
+  }
+
   def fullAdd(slate: SlateDTO): Future[Long] = {
-    def addCandidates(qID: Long, candidates: Seq[CandidateDTO]) : DBIO[Option[Int]] = {
-      val dbCandidates = candidates.map(cDTO => Candidate(cDTO.id.getOrElse(0), cDTO.name, cDTO.description, qID))
+    def addCandidates(sID: Long, qID: Long, candidates: Seq[CandidateDTO]) : DBIO[Option[Int]] = {
+      val dbCandidates = candidates.map(cDTO => Candidate(cDTO.id.getOrElse(0), cDTO.name, cDTO.description, questionID = qID, slateID = sID))
       CandidateRepository.candidates ++= dbCandidates
     }
 
@@ -84,7 +97,7 @@ class SlateRepository @Inject()(protected val dbConfigProvider: DatabaseConfigPr
       val dbquestion = Question(question.id.getOrElse(0), sID, question.text)
       for {
         newQid <- QuestionRepository.questionsInserts += dbquestion
-        _ <- addCandidates(newQid, question.candidates)
+        _ <- addCandidates(sID, newQid, question.candidates)
       } yield ()
     }
 

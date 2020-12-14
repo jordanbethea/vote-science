@@ -12,6 +12,10 @@ POST    /api/createSlate            controllers.CreationController.createSlate()
 # return list of all slates
 GET     /api/slates                 controllers.CreationController.getSlates
 
+# load voting interface for a given slate
+GET     /api/vote/:ballotID         controllers.VotingController.loadBallot(ballotID: Long)
+
+
 
 # Serve static assets under public directory
 GET     /*file                      controllers.FrontendController.assetOrDefault(file)

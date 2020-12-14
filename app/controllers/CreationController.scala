@@ -26,8 +26,8 @@ class CreationController @Inject()(slatesRepo: SlateRepository,
         null
     }
 
-    val questions = newSlate.questions
-    val candidates = questions.flatMap(question => question.candidates)
+    //val questions = newSlate.questions
+    //val candidates = questions.flatMap(question => question.candidates)
 
     Console.println(s"Request: ${request.toString()}");
     Console.println(s"params?: ${request.body}");
@@ -50,7 +50,8 @@ class CreationController @Inject()(slatesRepo: SlateRepository,
     } yield {
       Console.println("Running actual get slates: :")
       Console.println(Json.toJson(SlateRepository.constructSlateDTO(slates, questions, candidates)))
-      Ok(Json.toJson(SlateRepository.constructSlateDTO(slates, questions, candidates)))
+      val jsonSlate = Json.toJson(SlateRepository.constructSlateDTO(slates, questions, candidates))
+      Ok(jsonSlate)
     }
   }
 }
