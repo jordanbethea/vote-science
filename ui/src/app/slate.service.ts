@@ -6,9 +6,10 @@ import { Observable } from 'rxjs/index';
 @Injectable({
   providedIn: 'root'
 })
-export class CreationService {
+export class SlateService {
   private creationUrl = '/api/createSlate';
   private listUrl = '/api/slates';
+  private loadSlateUrl = '/api/vote/';
 
   constructor(private http: HttpClient) { }
 
@@ -18,6 +19,10 @@ export class CreationService {
 
   getAllSlates() : Observable<Array<Slate>> {
     return this.http.get<Array<Slate>>(this.listUrl);
+  }
+
+  loadSlate(slateID: number): Observable<Slate> {
+    return this.http.get<Slate>("${this.loadSlateUrl}${slateID}");
   }
 
 }

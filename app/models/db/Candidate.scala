@@ -12,7 +12,7 @@ case class Candidate (id: Long, name: String, description: String, slateID: Long
 
 object Candidate {
   implicit def candidateDTOToCandidate(questionID: Long, candidateDTO: CandidateDTO): Candidate = {
-    new Candidate(questionID, candidateDTO.name, candidateDTO.description, candidateDTO.id.getOrElse(0))
+    new Candidate(candidateDTO.id.getOrElse(0), candidateDTO.name, candidateDTO.description, candidateDTO.id.getOrElse(0), questionID)
   }
   //https://github.com/VirtusLab/unicorn/issues/11
   val tupled = (this.apply _).tupled
@@ -25,9 +25,9 @@ class CandidateTableDef(tag: Tag) extends Table[Candidate](tag, "CANDIDATES") {
   def slateID = column[Long]("SLATE_ID")
   def questionID = column[Long]("QUESTION_ID")
 
-  override def * = (id, name, description, questionID).mapTo[Candidate]
+  override def * = (id, name, description, slateID, questionID).mapTo[Candidate]
   def question = foreignKey("QUESTION_CANDIDATE_FK", questionID, QuestionRepository.questions)(_.id)
-  def ballot = foreignKey("SLATE_CANDIDATE_FK", slateID, BallotRepository.ballots)(_.id)
+  def slate = foreignKey("SLATE_CANDIDATE_FK", slateID, SlateRepository.slates)(_.id)
 }
 
 object CandidateRepository {

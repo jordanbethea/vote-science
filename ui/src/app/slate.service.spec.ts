@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
 
-import { CreationService } from './creation.service';
+import { CreationService } from './slate.service';
 
 describe('CreationService', () => {
 

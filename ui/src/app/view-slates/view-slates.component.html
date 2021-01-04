@@ -3,6 +3,7 @@
         Title: {{slate.title}}
         Creator: {{slate.creator}}
     </div>
+  <a [routerLink]="['/voting/',slate.id]">Vote on this slate</a>
     <div class="questionsContainer">
         <div class="question" *ngFor="let question of slate.questions">
             <div class="questionInfo">

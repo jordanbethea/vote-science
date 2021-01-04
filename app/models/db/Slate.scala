@@ -75,9 +75,9 @@ class SlateRepository @Inject()(protected val dbConfigProvider: DatabaseConfigPr
   }
 
   def getFullSlate(id: Long) : Future[Option[SlateDTO]] = {
-    val slatesF: Future[Seq[Slate]] = db.run(SlateRepository.slates.filter(_.id == id).result)
-    val questionsF: Future[Seq[Question]] = db.run(QuestionRepository.questions.filter(_.slateID == id).result)
-    val candidatesF: Future[Seq[Candidate]] = db.run(CandidateRepository.candidates.filter(_.slateID == id).result)
+    val slatesF: Future[Seq[Slate]] = db.run(SlateRepository.slates.filter(_.id === id).result)
+    val questionsF: Future[Seq[Question]] = db.run(QuestionRepository.questions.filter(_.slateID === id).result)
+    val candidatesF: Future[Seq[Candidate]] = db.run(CandidateRepository.candidates.filter(_.slateID === id).result)
     for {
       slate <- slatesF
       question <- questionsF

@@ -1,6 +1,6 @@
 import { JsonPipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { CreationService, Slate } from '../creation.service';
+import { SlateService, Slate } from '../slate.service';
 
 
 @Component({
@@ -10,7 +10,7 @@ import { CreationService, Slate } from '../creation.service';
 })
 export class ViewSlatesComponent implements OnInit {
 
-  constructor(private creationService:CreationService) { }
+  constructor(private creationService:SlateService) { }
 
   slates:Array<Slate> = new Array<Slate>();
 

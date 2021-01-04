@@ -1,0 +1,16 @@
+<h2>First Past the Post Voting Model</h2>
+<div [formGroup]="fptpGroup">
+  <div formArrayName="fptpQuestions">
+    <div *ngFor="let question of fptpQuestions.controls; let i=index">
+      <div [formGroupName]="i">
+        <label>
+          {{slate.questions[i].text}}
+          <select formControlName="{{slate.questions[i].id}}">
+            <option *ngFor="let answer of slate.questions[i].candidates" [value]="answer.id">{{answer.name}}</option>
+          </select>
+        </label>
+      </div>
+
+    </div>
+  </div>
+</div>

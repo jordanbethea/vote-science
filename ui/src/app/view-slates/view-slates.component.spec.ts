@@ -1,6 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { Observable } from 'rxjs';
-import { CreationService } from '../creation.service';
+import { CreationService } from '../slate.service';
 
 import { ViewSlatesComponent } from './view-slates.component';
 
@@ -9,7 +9,7 @@ describe('ViewSlatesComponent', () => {
   let fixture: ComponentFixture<ViewSlatesComponent>;
 
   let mockCreationService = jasmine.createSpyObj('CreationService', {
-      createNewSlate: {}, 
+      createNewSlate: {},
       getAllSlates: (new Observable(observer => observer.next([{id: 1, title: "test", creator:"none", questions: null}])))
     })
 

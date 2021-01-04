@@ -10,6 +10,8 @@ import { AppHttpInterceptorService } from './http-interceptor.service';
 import { HomepageComponent } from './homepage/homepage.component';
 import { ViewSlatesComponent } from './view-slates/view-slates.component';
 import { CreateSlateComponent } from './create-slate/create-slate.component';
+import {VotingModule} from "./voting/voting.module";
+import {VotingComponent} from "./voting/voting/voting.component";
 
 const routes: Routes = [
   {
@@ -25,6 +27,11 @@ const routes: Routes = [
   {
     path: 'viewSlates',
     component: ViewSlatesComponent,
+    data: {}
+  },
+  {
+    path: 'vote/:slateID',
+    component: VotingComponent,
     data: {}
   },
   {
@@ -49,7 +56,8 @@ const routes: Routes = [
       headerName: 'Csrf-Token',
     }),
     RouterModule.forRoot(routes),
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    VotingModule
   ],
   providers: [
     {

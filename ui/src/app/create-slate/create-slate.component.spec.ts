@@ -1,6 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormBuilder } from '@angular/forms';
-import { CreationService } from '../creation.service';
+import { CreationService } from '../slate.service';
 
 import { CreateSlateComponent } from './create-slate.component';
 

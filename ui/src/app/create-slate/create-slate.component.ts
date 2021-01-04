@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormArray, FormControl, FormGroup } from '@angular/forms';
-import { CreationService, Slate } from '../creation.service';
+import { SlateService, Slate } from '../slate.service';
 
 
 @Component({
@@ -10,9 +10,9 @@ import { CreationService, Slate } from '../creation.service';
 })
 export class CreateSlateComponent implements OnInit {
 
-  localJson = JSON;
+  //local Json = JSON;
 
-  constructor(private fb: FormBuilder, private createService: CreationService) { }
+  constructor(private fb: FormBuilder, private createService: SlateService) { }
 
   slateForm = this.fb.group({
     title: [''],
