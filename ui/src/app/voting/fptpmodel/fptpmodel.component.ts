@@ -1,6 +1,7 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, OnInit, OnChanges} from '@angular/core';
 import {Slate} from "../../slate.service";
 import {FormBuilder, FormGroup, FormArray} from "@angular/forms";
+import {CommonModule} from "@angular/common";
 
 @Component({
   selector: 'app-fptpmodel',
@@ -15,24 +16,31 @@ export class FPTPModelComponent implements OnInit {
   @Input('group')
   fptpGroup: FormGroup | undefined;
 
+  fptpQuestions: FormArray = this.fb.array([]);
+
   constructor(private fb: FormBuilder) { }
 
   ngOnInit(): void {
+  }
+
+  ngOnChanges(): void {
     this.initFormFromSlate();
   }
 
   initFormFromSlate() {
-    if(this.slate == undefined || this.fptpGroup == undefined){ return; }
+    if(this.slate == undefined || this.fptpGroup == undefined){
+      console.log(`slate: ${this.slate}, fptpGroup: ${this.fptpGroup}`);
+      return;
+    }
 
-    let questions = this.fb.array([]);
     for(let q of this.slate.questions) {
-      questions.push(
+      this.fptpQuestions.push(
         this.fb.group({
           [q.id ?? 0]: ['']
         }
       ));
     }
-    this.fptpGroup.addControl("fptpQuestions", questions);
+    this.fptpGroup.addControl("fptpQuestions", this.fptpQuestions);
   }
 
 }

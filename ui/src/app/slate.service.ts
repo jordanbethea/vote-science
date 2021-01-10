@@ -22,7 +22,8 @@ export class SlateService {
   }
 
   loadSlate(slateID: number): Observable<Slate> {
-    return this.http.get<Slate>("${this.loadSlateUrl}${slateID}");
+    let generatedURL: string = `${this.loadSlateUrl}${slateID}`;
+    return this.http.get<Slate>(generatedURL);
   }
 
 }

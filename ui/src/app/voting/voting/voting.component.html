@@ -1,12 +1,12 @@
 <h2>Vote on this ballot: {{slate?.title}}</h2>
-<form [formControl]="votingForm">
+<form [formGroup]="votingForm">
   <div *ngIf="useFPTP">
     <app-fptpmodel [slate]="slate" [group]="votingForm.controls.fptpModel"></app-fptpmodel>
   </div>
-  <button (click)="submitForm()"></button>
+  <button (click)="submitForm()">Submit Form (display raw)</button>
 </form>
 
 <div>
   <h2>Raw Output</h2>
-  {{rawOutput}}
+  {{rawOutput | json}}
 </div>

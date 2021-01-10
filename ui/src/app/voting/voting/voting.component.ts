@@ -15,19 +15,25 @@ export class VotingComponent implements OnInit {
 
   votingForm = this.fb.group({});
 
-  useFPTP = true
+  useFPTP = true;
 
   rawOutput = {}
 
   constructor(private route: ActivatedRoute, private slateService: SlateService, private fb: FormBuilder) { }
 
   ngOnInit(): void {
-    this.sub = this.route.params.subscribe(params => {
-      let slateID = params['slateID'];
-      let slateObservable = this.slateService.loadSlate(slateID);
-      slateObservable.subscribe(
-        slate => this.slate = slate
-      )
+    this.addFormsForModels();
+    this.sub = this.route.paramMap.subscribe(params => {
+      let slateIDraw = params.get('slateID');
+      if(slateIDraw == undefined){
+        console.log("Invalid slate id")
+      } else {
+        let slateID: number = +slateIDraw;
+        let slateObservable = this.slateService.loadSlate(slateID);
+        slateObservable.subscribe(
+          slate => this.slate = slate
+        )
+      }
     });
   }
 

@@ -19,6 +19,7 @@ CREATE TABLE CANDIDATES (
     name varchar(255) NOT NULL,
     description varchar(255) NULL,
     question_id bigint(20) references QUESTIONS(id),
+    slate_id bigint(20) references SLATES(id),
     PRIMARY KEY (id)
 );
 

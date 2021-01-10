@@ -1,6 +1,6 @@
 <h2>First Past the Post Voting Model</h2>
-<div [formGroup]="fptpGroup">
-  <div formArrayName="fptpQuestions">
+<div *ngIf="fptpGroup" [formGroup]="fptpGroup">
+  <div *ngIf="fptpQuestions && slate" formArrayName="fptpQuestions">
     <div *ngFor="let question of fptpQuestions.controls; let i=index">
       <div [formGroupName]="i">
         <label>
@@ -10,7 +10,7 @@
           </select>
         </label>
       </div>
-
     </div>
   </div>
 </div>
+<!-- FPTPGroup: {{fptpGroup | json}} -->
