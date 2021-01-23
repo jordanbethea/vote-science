@@ -5,7 +5,8 @@
       <div [formGroupName]="i">
         <label>
           {{slate.questions[i].text}}
-          <select formControlName="{{slate.questions[i].id}}">
+          <!--<select formControlName="{{slate.questions[i].id}}">-->
+          <select formControlName="candidateID">
             <option *ngFor="let answer of slate.questions[i].candidates" [value]="answer.id">{{answer.name}}</option>
           </select>
         </label>

@@ -36,7 +36,9 @@ export class FPTPModelComponent implements OnInit {
     for(let q of this.slate.questions) {
       this.fptpQuestions.push(
         this.fb.group({
-          [q.id ?? 0]: ['']
+          //[q.id ?? 0]: ['']    -- too clever, can't pull the qid when getting the form values
+          questionID: q.id,
+          candidateID: ''
         }
       ));
     }

@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { FPTPModelComponent } from './fptpmodel.component';
+import {FormBuilder} from "@angular/forms";
 
 describe('FPTPModelComponent', () => {
   let component: FPTPModelComponent;
@@ -8,7 +9,8 @@ describe('FPTPModelComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ FPTPModelComponent ]
+      declarations: [ FPTPModelComponent ],
+      providers: [FormBuilder]
     })
     .compileComponents();
   });

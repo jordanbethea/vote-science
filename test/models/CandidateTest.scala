@@ -11,20 +11,20 @@ class CandidateTest extends PlaySpec with DatabaseTemplate {
 
   val slate1 = new Slate(-1, "Slate 1", "Slate Maker")
   val question1 = (slateID:Long) => new Question(-1, slateID, "Pick a Candidate:")
-  val candidate1 = (questionID:Long) => new Candidate(-1, "Benjamin Franklin", "kite guy", questionID)
+  val candidate1 = (qID:Long, sID:Long) => new Candidate(-1, "Benjamin Franklin", "kite guy",sID, qID)
 
   "Candidates" must {
     "create without error" in {}
 
     "require a question to insert a new candidate" in {
-      an[JdbcSQLIntegrityConstraintViolationException] must be thrownBy (exec(candidates.add(candidate1(30))))
+      an[JdbcSQLIntegrityConstraintViolationException] must be thrownBy (exec(candidates.add(candidate1(30, 30))))
     }
 
     "create a candidate for a question" in {
       val slateID = exec(slates.add(slate1))
       val questionID = exec(questions.add(question1(slateID)))
 
-      val candidateID = exec(candidates.add(candidate1(questionID)))
+      val candidateID = exec(candidates.add(candidate1(questionID, slateID)))
 
       candidateID must not be (None)
     }
@@ -32,7 +32,7 @@ class CandidateTest extends PlaySpec with DatabaseTemplate {
     "get existing candidate" in {
       val slateID = exec(slates.add(slate1))
       val questionID = exec(questions.add(question1(slateID)))
-      val candidateID = exec(candidates.add(candidate1(questionID)))
+      val candidateID = exec(candidates.add(candidate1(questionID, slateID)))
 
       val result = exec(candidates.get(candidateID)).getOrElse(null)
       result must not be (null)
@@ -42,7 +42,7 @@ class CandidateTest extends PlaySpec with DatabaseTemplate {
     "delete existing candidate" in {
       val slateID = exec(slates.add(slate1))
       val questionID = exec(questions.add(question1(slateID)))
-      val candidateID = exec(candidates.add(candidate1(questionID)))
+      val candidateID = exec(candidates.add(candidate1(questionID, slateID)))
 
       val deleteResult = exec(candidates.delete(candidateID))
       deleteResult must be (1)

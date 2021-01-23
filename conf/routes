@@ -15,6 +15,12 @@ GET     /api/slates                 controllers.CreationController.getSlates
 # load voting interface for a given slate
 GET     /api/vote/:ballotID         controllers.VotingController.loadBallot(ballotID: Long)
 
+# save vote data for a specific ballot
+POST    /api/vote/:ballotID         controllers.VotingController.saveBallot(ballotID: Long)
+
+# get results info for given slate (just testing purposes atm)
+#GET     /api/results/:slateID
+
 
 
 # Serve static assets under public directory

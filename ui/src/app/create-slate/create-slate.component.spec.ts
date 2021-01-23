@@ -1,6 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormBuilder } from '@angular/forms';
-import { CreationService } from '../slate.service';
+import { SlateService } from '../slate.service';
 
 import { CreateSlateComponent } from './create-slate.component';
 
@@ -17,7 +17,7 @@ describe('CreateSlateComponent', () => {
       providers: [
         FormBuilder,
         //{provide: FormBuilder, useValue: mockFormBuilder},
-        {provide: CreationService, useValue: mockCreationService}]
+        {provide: SlateService, useValue: mockCreationService}]
     })
     .compileComponents();
   }));

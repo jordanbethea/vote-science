@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import {ActivatedRoute } from '@angular/router';
 import {SlateService, Slate} from "../../slate.service";
-import {FormBuilder, FormGroup} from "@angular/forms";
+import {FormArray, FormBuilder, FormGroup} from "@angular/forms";
+import {Ballot, BallotDetails, FPTPModel, VotingService} from "../voting.service";
 
 @Component({
   selector: 'app-voting',
@@ -19,7 +20,8 @@ export class VotingComponent implements OnInit {
 
   rawOutput = {}
 
-  constructor(private route: ActivatedRoute, private slateService: SlateService, private fb: FormBuilder) { }
+  constructor(private route: ActivatedRoute, private slateService: SlateService, private fb: FormBuilder,
+              private voting: VotingService) { }
 
   ngOnInit(): void {
     this.addFormsForModels();
@@ -47,6 +49,31 @@ export class VotingComponent implements OnInit {
 
   submitForm() {
     this.rawOutput = this.votingForm.getRawValue()
+    let ballot:Ballot = {
+      details: this.createBallotFromForm(),
+      fptpModel: this.createFPTPModelFromForm()
+    }
+    this.voting.saveBallot(ballot)
+  }
+
+  createFPTPModelFromForm(): FPTPModel {
+    return {
+      choices: (this.votingForm.get('fptpModel')?.get('fptpQuestions') as FormArray).controls.map(fptpChoice => {
+        return {
+          ballotID: this.votingForm.get('id')?.value ?? -1,
+          questionID: fptpChoice.get('questionID')?.value ?? -1,
+          candidateID: fptpChoice.get('candidateID')?.value ?? -1
+        }
+      })
+    }
+  }
+
+  createBallotFromForm() : BallotDetails {
+    return {
+      id: this.votingForm.get('id')?.value ?? -1,
+      voter: this.votingForm.get('voter')?.value ?? "",
+      slateID: this.votingForm.get('slateID')?.value ?? -1
+    }
   }
 
 }

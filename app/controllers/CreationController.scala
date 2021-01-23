@@ -54,4 +54,5 @@ class CreationController @Inject()(slatesRepo: SlateRepository,
       Ok(jsonSlate)
     }
   }
+
 }

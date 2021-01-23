@@ -1,6 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { Observable } from 'rxjs';
-import { CreationService } from '../slate.service';
+import { SlateService } from '../slate.service';
 
 import { ViewSlatesComponent } from './view-slates.component';
 
@@ -16,7 +16,7 @@ describe('ViewSlatesComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [ ViewSlatesComponent ],
-      providers: [{provide: CreationService, useValue: mockCreationService}]
+      providers: [{provide: SlateService, useValue: mockCreationService}]
     })
     .compileComponents();
   }));
