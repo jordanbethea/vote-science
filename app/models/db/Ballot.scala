@@ -4,7 +4,7 @@ import play.api.db.slick.{DatabaseConfigProvider, HasDatabaseConfigProvider}
 import slick.jdbc.JdbcProfile
 import slick.jdbc.H2Profile.api._
 import com.google.inject.Inject
-import models.dto.{BallotDTO, FPTPModelDTO}
+import models.dto.{BallotDetailsDTO, FPTPModelDTO}
 import slick.dbio.DBIOAction
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -13,7 +13,7 @@ import scala.concurrent.{ExecutionContext, Future}
 case class Ballot(id: Long, slateID: Long, voter: String)
 
 object Ballot {
-  implicit def ballotDTOToDb(dto: BallotDTO): Ballot = {
+  implicit def ballotDTOToDb(dto: BallotDetailsDTO): Ballot = {
     Ballot(dto.id.getOrElse(0), dto.slateID, dto.voter)
   }
 
@@ -39,7 +39,8 @@ class BallotRepository @Inject()(protected val dbConfigProvider: DatabaseConfigP
                                 (implicit executionContext: ExecutionContext)
   extends HasDatabaseConfigProvider[JdbcProfile] {
 
-  def addBallotAndModelData(ballot: BallotDTO, fptpData:Option[FPTPModelDTO]) : Future[Long] = {
+  def addBallotAndModelData(ballot: BallotDetailsDTO, fptpData:Option[FPTPModelDTO]) : Future[Long] = {
+    Console.println(s"Adding Ballot and model data to db, ballot: ${ballot.toString}, fptp: ${fptpData.toString}")
     val dbBallot : Ballot = Ballot(ballot.id.getOrElse(0), ballot.slateID, ballot.voter)
     val tx = for {
       newBallotId <- BallotRepository.ballotsInserts += dbBallot
@@ -64,6 +65,7 @@ class BallotRepository @Inject()(protected val dbConfigProvider: DatabaseConfigP
   }
 
   def getBallotsForSlate(slateID: Long): Future[Seq[Ballot]] = {
+    //Console.println(s"running getBallotsForSlate in ballot repo - total ballots ${BallotRepository.ballots.length.results}")
     dbConfig.db.run(BallotRepository.ballots.filter(_.slateID === slateID).result)
   }
 

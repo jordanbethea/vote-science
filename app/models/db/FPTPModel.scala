@@ -4,7 +4,7 @@ import play.api.db.slick.{DatabaseConfigProvider, HasDatabaseConfigProvider}
 import slick.jdbc.JdbcProfile
 import slick.jdbc.H2Profile.api._
 import com.google.inject.Inject
-import models.dto.{BallotDTO, FPTPChoiceDTO, FPTPModelDTO}
+import models.dto.{BallotDetailsDTO, FPTPChoiceDTO, FPTPModelDTO}
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -76,6 +76,10 @@ class FPTPRepository @Inject()(protected val dbConfigProvider: DatabaseConfigPro
 
   def getChoicesForBallot(ballotID: Long): Future[Seq[FPTPChoice]] = {
     dbConfig.db.run(FPTPRepository.fptpResults.filter(_.ballotID === ballotID).result)
+  }
+
+  def getChoicesForBallots(ballotIDs: Seq[Long]): Future[Seq[FPTPChoice]] = {
+    dbConfig.db.run(FPTPRepository.fptpResults.filter(_.ballotID.inSet(ballotIDs)).result)
   }
 
   def listAll() = {

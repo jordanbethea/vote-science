@@ -1,0 +1,4 @@
+<div *ngFor="let ballot of castBallots">
+  <div>Ballot details: {{ballot.details | json}}</div>
+  <div>FPTP results: {{ballot.fptpModel | json}}</div>
+</div>

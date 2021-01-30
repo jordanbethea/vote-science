@@ -6,13 +6,19 @@ import { Observable } from 'rxjs/index';
   providedIn: 'root'
 })
 export class VotingService {
-  private saveBallotURl = '/api/vote';
+  private saveBallotURL = '/api/vote/';
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {
+  }
 
   public saveBallot(ballot: Ballot): Observable<any> {
-    let generatedURL: string = `${this.saveBallotURl}${ballot.details.slateID}`
+    let generatedURL: string = `${this.saveBallotURL}${ballot.details.slateID}`
     return this.http.post(generatedURL, ballot);
+  }
+
+  public getSlateResults(slateID: number): Observable<Array<Ballot>> {
+    let generatedURL: string = `api/results/${slateID}`;
+    return this.http.get<Array<Ballot>>(generatedURL);
   }
 }
 

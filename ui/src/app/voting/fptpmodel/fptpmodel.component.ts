@@ -38,7 +38,7 @@ export class FPTPModelComponent implements OnInit {
         this.fb.group({
           //[q.id ?? 0]: ['']    -- too clever, can't pull the qid when getting the form values
           questionID: q.id,
-          candidateID: ''
+          candidateID: -1
         }
       ));
     }

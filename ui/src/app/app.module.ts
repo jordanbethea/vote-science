@@ -12,6 +12,7 @@ import { ViewSlatesComponent } from './view-slates/view-slates.component';
 import { CreateSlateComponent } from './create-slate/create-slate.component';
 import {VotingModule} from "./voting/voting.module";
 import {VotingComponent} from "./voting/voting/voting.component";
+import {ResultsComponent} from "./voting/results/results.component";
 
 const routes: Routes = [
   {
@@ -32,6 +33,11 @@ const routes: Routes = [
   {
     path: 'vote/:slateID',
     component: VotingComponent,
+    data: {}
+  },
+  {
+    path: 'vote/results/:slateID',
+    component: ResultsComponent,
     data: {}
   },
   {

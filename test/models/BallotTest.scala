@@ -1,7 +1,7 @@
 package models.db
 
 import framework.DatabaseTemplate
-import models.dto.{BallotDTO, CandidateDTO, FPTPChoiceDTO, FPTPModelDTO, QuestionDTO, SlateDTO}
+import models.dto.{BallotDetailsDTO, CandidateDTO, FPTPChoiceDTO, FPTPModelDTO, QuestionDTO, SlateDTO}
 import org.scalatestplus.play._
 
 class BallotTest extends PlaySpec with DatabaseTemplate {
@@ -22,7 +22,7 @@ class BallotTest extends PlaySpec with DatabaseTemplate {
       new CandidateDTO(None, "Sweet Potato", "Best choice")))
   ))
 
-  val ballotStandaloneInsert = (sID: Long) => BallotDTO(None, "The Phantom Stranger", sID)
+  val ballotStandaloneInsert = (sID: Long) => BallotDetailsDTO(None, "The Phantom Stranger", sID)
 
 
 
@@ -53,7 +53,7 @@ class BallotTest extends PlaySpec with DatabaseTemplate {
       val q2c2ID = exec(candidates.add(Candidate(0, "sweet potato", "is good", slateID, q2ID)))
       val q2c3ID = exec(candidates.add(Candidate(0, "boston creme", "is good", slateID, q2ID)))
 
-      val ballotDTOInsert: BallotDTO = BallotDTO(None, "Benjamin Franklin", 1l)
+      val ballotDTOInsert: BallotDetailsDTO = BallotDetailsDTO(None, "Benjamin Franklin", 1l)
       val fptpDTOInsert: FPTPModelDTO = FPTPModelDTO(Seq(
         FPTPChoiceDTO(0, q1ID, q1c2ID),
         FPTPChoiceDTO(0, q2ID, q2c3ID)

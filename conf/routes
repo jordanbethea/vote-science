@@ -19,7 +19,7 @@ GET     /api/vote/:ballotID         controllers.VotingController.loadBallot(ball
 POST    /api/vote/:ballotID         controllers.VotingController.saveBallot(ballotID: Long)
 
 # get results info for given slate (just testing purposes atm)
-#GET     /api/results/:slateID
+GET     /api/results/:slateID       controllers.VotingController.getSlateResults(slateID: Long)
 
 
 

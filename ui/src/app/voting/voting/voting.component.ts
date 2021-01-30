@@ -19,6 +19,7 @@ export class VotingComponent implements OnInit {
   useFPTP = true;
 
   rawOutput = {}
+  saveResult = {}
 
   constructor(private route: ActivatedRoute, private slateService: SlateService, private fb: FormBuilder,
               private voting: VotingService) { }
@@ -53,7 +54,7 @@ export class VotingComponent implements OnInit {
       details: this.createBallotFromForm(),
       fptpModel: this.createFPTPModelFromForm()
     }
-    this.voting.saveBallot(ballot)
+    this.voting.saveBallot(ballot).subscribe( result => this.saveResult = result );
   }
 
   createFPTPModelFromForm(): FPTPModel {
@@ -62,7 +63,7 @@ export class VotingComponent implements OnInit {
         return {
           ballotID: this.votingForm.get('id')?.value ?? -1,
           questionID: fptpChoice.get('questionID')?.value ?? -1,
-          candidateID: fptpChoice.get('candidateID')?.value ?? -1
+          candidateID: +fptpChoice.get('candidateID')?.value ?? -1
         }
       })
     }
@@ -72,7 +73,7 @@ export class VotingComponent implements OnInit {
     return {
       id: this.votingForm.get('id')?.value ?? -1,
       voter: this.votingForm.get('voter')?.value ?? "",
-      slateID: this.votingForm.get('slateID')?.value ?? -1
+      slateID: this.slate?.id ?? -1
     }
   }
 
